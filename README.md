@@ -3,6 +3,8 @@ Fizz-Image is a custom placeholder image generator.
 The images are generated on the fly and can therefore be very easily personalized via the request URL.
 It is possible to set the dimensions, background color, text color and label text.
 
+Get started here **`https://fizz-image.herokuapp.com/`**
+
 ## Requests
 ### Dimensions
 The minimal required configuration are the image dimensions. \

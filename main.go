@@ -46,8 +46,27 @@ func main() {
 	router.HandleFunc(routes["full"], handleRequest).Queries("label", "{label}")
 	router.HandleFunc(routes["full"], handleRequest)
 
+	// Index handler
+	router.HandleFunc("/", index)
+
+	// 404 handler
+	router.NotFoundHandler = http.HandlerFunc(render404)
+
 	// serve
 	log.Fatal(http.ListenAndServe(":"+port, router))
+}
+
+// Handles the index route
+func index(writer http.ResponseWriter, request *http.Request) {
+	http.Redirect(writer, request, "https://github.com/jschaefer-io/fizz-image", 302)
+}
+
+// Handles the 404 Error-Page
+func render404(writer http.ResponseWriter, request *http.Request) {
+	link := fmt.Sprintf("<a href='%s'>GitHub</a>", "https://github.com/jschaefer-io/fizz-image")
+	writer.Header().Add("content-type", "text/html")
+	fmt.Fprintln(writer, "No Image could be generated.<br />")
+	fmt.Fprintln(writer, "Please check the documentation at " + link)
 }
 
 // Default function from which to handle all correct requests
