@@ -24,9 +24,7 @@ func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = ":8080"
-	} else {
-		port = ":" + port
+		port = "8080"
 	}
 
 	router := mux.NewRouter()
@@ -49,7 +47,7 @@ func main() {
 	router.HandleFunc(routes["full"], handleRequest)
 
 	// serve
-	log.Fatal(http.ListenAndServe(port, router))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 // Default function from which to handle all correct requests
