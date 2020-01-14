@@ -14,10 +14,19 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 )
 
 func main() {
+
+	// Heroku port
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = ":8080"
+	}
+
 	router := mux.NewRouter()
 	routes := map[string]string{
 		"base":     "/{width:[0-9]+}x{height:[0-9]+}",
@@ -38,7 +47,7 @@ func main() {
 	router.HandleFunc(routes["full"], handleRequest)
 
 	// serve
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(port, router))
 }
 
 // Default function from which to handle all correct requests
