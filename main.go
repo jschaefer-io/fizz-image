@@ -90,10 +90,10 @@ func handleRequest(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Builds the default error message
-func getErrorMessage() string{
+func getErrorMessage() string {
 	link := fmt.Sprintf("<a href='%s'>GitHub</a>", "https://github.com/jschaefer-io/fizz-image")
 	message := fmt.Sprintln("No Image could be generated.<br />")
-	message += fmt.Sprintln("Please check the documentation at "+link)
+	message += fmt.Sprintln("Please check the documentation at " + link)
 	return message
 }
 
@@ -137,7 +137,7 @@ func generateAndWriteImage(vars *map[string]string, writer io.Writer) error {
 	options := jpeg.Options{
 		Quality: 100,
 	}
-	jpeg.Encode(writer, &img, &options)
+	_ = jpeg.Encode(writer, &img, &options)
 	return nil
 }
 
@@ -180,9 +180,14 @@ func readColor(vars *map[string]string, field string) (color.RGBA, error) {
 	}
 
 	// Calculate Colors
-	red, _ := hexStringToUInt8(string(bg[0]) + string(bg[1]))
-	green, _ := hexStringToUInt8(string(bg[2]) + string(bg[3]))
-	blue, _ := hexStringToUInt8(string(bg[4]) + string(bg[5]))
+	red, e1 := hexStringToUInt8(string(bg[0]) + string(bg[1]))
+	green, e2 := hexStringToUInt8(string(bg[2]) + string(bg[3]))
+	blue, e3 := hexStringToUInt8(string(bg[4]) + string(bg[5]))
+
+	// Validated hex2uint8
+	if e1 != nil || e2 != nil || e3 != nil {
+		return color.RGBA{}, errors.New("unable to read background color")
+	}
 
 	// Build and return
 	backgroundColor := color.RGBA{
@@ -205,7 +210,7 @@ func hexStringToUInt8(str string) (uint8, error) {
 func buildImage(backgroundColor color.RGBA, width int, height int) image.RGBA {
 	rect := image.Rect(0, 0, width, height)
 	img := image.NewRGBA(rect)
-	draw.Draw(img, img.Bounds(), &image.Uniform{C: backgroundColor}, image.ZP, draw.Src)
+	draw.Draw(img, img.Bounds(), &image.Uniform{C: backgroundColor}, image.Point{}, draw.Src)
 	return *img
 }
 
