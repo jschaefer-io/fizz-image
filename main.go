@@ -58,22 +58,43 @@ func main() {
 
 // Handles the index route
 func index(writer http.ResponseWriter, request *http.Request) {
-	http.Redirect(writer, request, "https://github.com/jschaefer-io/fizz-image", 302)
+	vars := map[string]string{
+		"label": "Please provide dimensions /{width}x{height}",
+	}
+	vars = prepareVars(vars)
+	_ = generateAndWriteImage(&vars, writer)
 }
 
 // Handles the 404 Error-Page
 func render404(writer http.ResponseWriter, request *http.Request) {
-	link := fmt.Sprintf("<a href='%s'>GitHub</a>", "https://github.com/jschaefer-io/fizz-image")
 	writer.Header().Add("content-type", "text/html")
-	fmt.Fprintln(writer, "No Image could be generated.<br />")
-	fmt.Fprintln(writer, "Please check the documentation at " + link)
+	writer.WriteHeader(http.StatusNotFound)
+	fmt.Fprint(writer, getErrorMessage())
+}
+
+// Handles the 400 Error-Page
+func render400(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Add("content-type", "text/html")
+	writer.WriteHeader(http.StatusBadRequest)
+	fmt.Fprint(writer, getErrorMessage())
 }
 
 // Default function from which to handle all correct requests
 func handleRequest(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	vars = prepareVars(vars)
-	generateAndWriteImage(&vars, writer)
+	err := generateAndWriteImage(&vars, writer)
+	if err != nil {
+		render400(writer, request)
+	}
+}
+
+// Builds the default error message
+func getErrorMessage() string{
+	link := fmt.Sprintf("<a href='%s'>GitHub</a>", "https://github.com/jschaefer-io/fizz-image")
+	message := fmt.Sprintln("No Image could be generated.<br />")
+	message += fmt.Sprintln("Please check the documentation at "+link)
+	return message
 }
 
 // Merges the request var string map with a
@@ -96,8 +117,13 @@ func prepareVars(vars map[string]string) map[string]string {
 
 // Generate the image from the given vars
 // and writes it to the given io.Writer
-func generateAndWriteImage(vars *map[string]string, writer io.Writer) {
+func generateAndWriteImage(vars *map[string]string, writer io.Writer) error {
 	width, height, _ := readSizes(vars)
+
+	if width*height > 4000*4000 {
+		return errors.New("image dimensions to big")
+	}
+
 	backgroundColor, _ := readColor(vars, "background")
 	labelColor, _ := readColor(vars, "color")
 	label, _ := readLabel(vars)
@@ -112,6 +138,7 @@ func generateAndWriteImage(vars *map[string]string, writer io.Writer) {
 		Quality: 100,
 	}
 	jpeg.Encode(writer, &img, &options)
+	return nil
 }
 
 // Tries to resolve the image label from
