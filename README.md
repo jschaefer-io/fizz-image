@@ -1,4 +1,4 @@
-# Fizz-Image [![CircleCI](https://circleci.com/gh/jschaefer-io/fizz-image.svg?style=svg)](https://circleci.com/gh/jschaefer-io/fizz-image)
+# Fizz-Image ![Go](https://github.com/jschaefer-io/fizz-image/workflows/Go/badge.svg)
 Fizz-Image is a custom placeholder image generator.
 The images are generated on the fly and can therefore be very easily personalized via the request URL.
 It is possible to set the dimensions, background color, text color and label text.
