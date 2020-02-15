@@ -84,6 +84,7 @@ func handleRequest(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	vars = prepareVars(vars)
 	err := generateAndWriteImage(&vars, writer)
+	log.Println(vars, err)
 	if err != nil {
 		render400(writer, request)
 	}
