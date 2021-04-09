@@ -1,5 +1,9 @@
 name: "Test"
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - master
+
 jobs:
   test_app:
     name: "Test application"
