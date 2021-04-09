@@ -5,5 +5,6 @@ jobs:
     name: "Test application"
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: "Build Container target 'tester'"
         run: docker build --target=tester .
