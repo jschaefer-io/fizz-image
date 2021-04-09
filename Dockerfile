@@ -10,6 +10,6 @@ ENV GOOS=linux
 RUN go build -o app .
 
 FROM alpine:latest
-EXPOSE 80
+EXPOSE 8080
 COPY --from=builder /app/app /app
 ENTRYPOINT ["/app"]

@@ -44,7 +44,7 @@ func main() {
 	router.NotFoundHandler = http.HandlerFunc(render404)
 
 	// serve
-	log.Fatal(http.ListenAndServe(":80", router))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 // Handles the index route
