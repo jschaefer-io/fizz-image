@@ -1,0 +1,12 @@
+name: "Test"
+on: [push]
+jobs:
+  test_app:
+    name: "Test application"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v2
+
+      - name: "Build Container target 'tester'"
+        run: docker build --target=tester .
