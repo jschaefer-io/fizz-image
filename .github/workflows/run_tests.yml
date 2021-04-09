@@ -6,4 +6,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build Container target 'tester'"
-        run: docker build --target=builder
+        run: docker build --target=tester .
