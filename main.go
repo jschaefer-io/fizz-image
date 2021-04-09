@@ -14,19 +14,10 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 )
 
 func main() {
-
-	// Heroku port
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = "8080"
-	}
-
 	router := mux.NewRouter()
 	routes := map[string]string{
 		"base":     "/{width:[0-9]+}x{height:[0-9]+}",
@@ -53,7 +44,7 @@ func main() {
 	router.NotFoundHandler = http.HandlerFunc(render404)
 
 	// serve
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe(":80", router))
 }
 
 // Handles the index route
@@ -63,6 +54,7 @@ func index(writer http.ResponseWriter, request *http.Request) {
 	}
 	vars = prepareVars(vars)
 	_ = generateAndWriteImage(&vars, writer)
+	log.Println("index::")
 }
 
 // Handles the 404 Error-Page
@@ -84,7 +76,7 @@ func handleRequest(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	vars = prepareVars(vars)
 	err := generateAndWriteImage(&vars, writer)
-	log.Println(vars, err)
+	log.Println("image::", vars, err)
 	if err != nil {
 		render400(writer, request)
 	}
