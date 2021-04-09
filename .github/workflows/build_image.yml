@@ -25,11 +25,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Tag Images"
+      - name: "Tag and Push Images"
         run: |
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
           docker tag app_image $IMAGE_ID:latest
-
-      - name: "Push Images"
-        run: |
           docker push $IMAGE_ID:latest

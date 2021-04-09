@@ -1,4 +1,4 @@
-# Fizz-Image [![Tests](https://github.com/jschaefer-io/fizz-image/actions/workflows/run_tests.yml/badge.svg)](https://github.com/jschaefer-io/fizz-image/actions/workflows/run_tests.yml)
+# Fizz-Image [![Tests](https://github.com/jschaefer-io/fizz-image/actions/workflows/run_tests.yml/badge.svg)](https://github.com/jschaefer-io/fizz-image/actions/workflows/run_tests.yml) [![Container](https://github.com/jschaefer-io/fizz-image/actions/workflows/build_image.yml/badge.svg)](https://github.com/jschaefer-io/fizz-image/actions/workflows/build_image.yml)
 Fizz-Image is a custom placeholder image generator.
 The images are generated on the fly and can therefore be very easily personalized via the request URL.
 It is possible to set the dimensions, background color, text color and label text.
