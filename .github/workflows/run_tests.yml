@@ -1,0 +1,9 @@
+name: "Application Test"
+on: [push, pull_request]
+jobs:
+  test_app:
+    name: "Test application"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Build Container target 'tester'"
+        run: docker build --target=builder
